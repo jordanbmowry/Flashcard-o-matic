@@ -3,6 +3,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 import Header from './Header';
 import NotFound from './NotFound';
 import Home from './Home';
+import StudyDeck from './StudyDeck';
 
 function Layout() {
   return (
@@ -18,6 +19,9 @@ function Layout() {
               </button>
             </Link>
             <Home />
+          </Route>
+          <Route path='/decks/:deckId/study'>
+            <StudyDeck />
           </Route>
           <Route>
             <NotFound />
