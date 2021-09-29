@@ -4,6 +4,7 @@ import Header from './Header';
 import NotFound from './NotFound';
 import Home from './Home';
 import StudyDeck from './StudyDeck';
+import CreateDeck from './CreateDeck';
 
 function Layout() {
   return (
@@ -19,6 +20,9 @@ function Layout() {
               </button>
             </Link>
             <Home />
+          </Route>
+          <Route path='/decks/new'>
+            <CreateDeck />
           </Route>
           <Route path='/decks/:deckId/study'>
             <StudyDeck />
