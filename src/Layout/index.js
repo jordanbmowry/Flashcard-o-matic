@@ -1,20 +1,28 @@
 import React from 'react';
+import { Route, Link, Switch } from 'react-router-dom';
 import Header from './Header';
 import NotFound from './NotFound';
+import Home from './Home';
 
 function Layout() {
   return (
     <React.Fragment>
-      <link
-        href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css'
-        rel='stylesheet'
-        integrity='sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU'
-        crossorigin='anonymous'
-      />
       <Header />
       <div className='container'>
         {/* TODO: Implement the screen starting here */}
-        <NotFound />
+        <Switch>
+          <Route exact path='/'>
+            <Link to='/decks/new'>
+              <button className='btn btn-secondary'>
+                <i className='fas fa-plus'></i> Create Deck
+              </button>
+            </Link>
+            <Home />
+          </Route>
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
       </div>
     </React.Fragment>
   );
