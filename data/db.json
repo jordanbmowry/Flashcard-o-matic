@@ -42,12 +42,6 @@
       "back": "Renders the first matching child <Route> ",
       "deckId": 2,
       "id": 5
-    },
-    {
-      "id": 7,
-      "front": "Lorem ipsum",
-      "back": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-      "deckId": 2
     }
   ]
 }

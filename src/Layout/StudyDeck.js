@@ -5,7 +5,6 @@ import { readDeck } from '../utils/api';
 function StudyDeck() {
   const initialState = {
     deck: { name: 'loading...', cards: [] },
-    error: null,
     isCardFlipped: false,
     currentIndex: 0,
   };
@@ -24,11 +23,9 @@ function StudyDeck() {
           deck: { ...loadedDeck },
         }));
       } catch (error) {
-        setStudyDeckState((currentState) => ({
-          ...currentState,
-          error,
-        }));
-        return error;
+        if (error.name !== 'AbortError') {
+          throw error;
+        }
       }
     }
     loadDeck();

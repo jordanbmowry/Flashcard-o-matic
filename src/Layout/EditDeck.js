@@ -1,26 +1,43 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { createDeck } from '../utils/api';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useHistory } from 'react-router-dom';
+import { readDeck, updateDeck } from '../utils/api';
 
-function CreateDeck() {
-  const initialFormState = {
-    name: '',
-    description: '',
-  };
+function EditDeck() {
+  const initialState = { name: '', description: '' };
+  const [editDeckFormData, setEditDeckFormData] = useState(initialState);
 
-  const [formData, setFormData] = useState(initialFormState);
+  const { deckId } = useParams();
   const history = useHistory();
 
-  const onChangeHandler = ({ target }) => {
-    setFormData((currentFormData) => ({
-      ...currentFormData,
+  useEffect(() => {
+    const abortController = new AbortController();
+    async function loadDeck() {
+      try {
+        const loadedDeck = await readDeck(deckId, abortController.signal);
+        setEditDeckFormData(() => loadedDeck);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          throw error;
+        }
+      }
+    }
+
+    loadDeck();
+    return () => {
+      abortController.abort();
+    };
+  }, [deckId]);
+
+  const changeHandler = ({ target }) => {
+    setEditDeckFormData((currentState) => ({
+      ...currentState,
       [target.name]: target.value,
     }));
   };
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    const response = await createDeck(formData);
+    const response = await updateDeck(editDeckFormData);
     history.push(`/decks/${response.id}`);
   };
 
@@ -33,13 +50,18 @@ function CreateDeck() {
               <i className='fas fa-home'></i> Home
             </Link>
           </li>
+          <li className='breadcrumb-item'>
+            <Link to={`/decks/${deckId}`}>
+              {editDeckFormData.name ? editDeckFormData.name : 'Loading...'}
+            </Link>
+          </li>
           <li className='breadcrumb-item active' aria-current='page'>
-            Create Deck
+            Edit Deck
           </li>
         </ol>
       </nav>
       <form>
-        <h1 className='my-4 text-center'>Create Deck</h1>
+        <h1 className='my-4 text-center'>Edit Deck</h1>
         <div className='form-group'>
           <label htmlFor='name'>Name</label>
           <input
@@ -48,8 +70,8 @@ function CreateDeck() {
             className='form-control form-control-lg'
             type='text'
             placeholder='Deck Name'
-            onChange={onChangeHandler}
-            value={formData.name}
+            onChange={changeHandler}
+            value={editDeckFormData.name}
             required
           ></input>
         </div>
@@ -61,8 +83,8 @@ function CreateDeck() {
             name='description'
             rows='5'
             placeholder='Brief description of the deck'
-            onChange={onChangeHandler}
-            value={formData.description}
+            onChange={changeHandler}
+            value={editDeckFormData.description}
             required
           ></textarea>
         </div>
@@ -70,7 +92,7 @@ function CreateDeck() {
           <button
             type='button'
             className='btn btn-secondary'
-            onClick={() => history.push('/')}
+            onClick={() => history.go(-1)}
           >
             Cancel
           </button>
@@ -87,4 +109,4 @@ function CreateDeck() {
   );
 }
 
-export default CreateDeck;
+export default EditDeck;
