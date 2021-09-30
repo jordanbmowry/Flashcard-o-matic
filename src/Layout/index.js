@@ -5,6 +5,7 @@ import NotFound from './NotFound';
 import Home from './Home';
 import StudyDeck from './StudyDeck';
 import CreateDeck from './CreateDeck';
+import ViewDeck from './ViewDeck';
 
 function Layout() {
   return (
@@ -21,11 +22,14 @@ function Layout() {
             </Link>
             <Home />
           </Route>
-          <Route path='/decks/new'>
+          <Route exact path='/decks/new'>
             <CreateDeck />
           </Route>
-          <Route path='/decks/:deckId/study'>
+          <Route exact path='/decks/:deckId/study'>
             <StudyDeck />
+          </Route>
+          <Route exact path='/decks/:deckId'>
+            <ViewDeck />
           </Route>
           <Route>
             <NotFound />
