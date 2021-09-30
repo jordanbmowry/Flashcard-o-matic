@@ -74,7 +74,7 @@ function StudyDeck() {
           </Link>
         </li>
         <li className='breadcrumb-item'>
-          <Link to={`/deck/${deckId}`}>{studyDeckState?.deck?.name}</Link>
+          <Link to={`/decks/${deckId}`}>{studyDeckState?.deck?.name}</Link>
         </li>
         <li className='breadcrumb-item active' aria-current='page'>
           Study
