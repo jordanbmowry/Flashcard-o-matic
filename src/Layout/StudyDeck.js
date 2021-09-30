@@ -11,6 +11,7 @@ function StudyDeck() {
 
   const [studyDeckState, setStudyDeckState] = useState(initialState);
   const { deck, isCardFlipped, currentIndex } = studyDeckState;
+
   const { deckId } = useParams();
 
   useEffect(() => {
@@ -41,7 +42,7 @@ function StudyDeck() {
     });
   }
 
-  function getNextCard() {
+  function getNextCardHandler() {
     const { cards } = deck;
     if (currentIndex === cards.length - 1) {
       const response = window.confirm(
@@ -71,7 +72,7 @@ function StudyDeck() {
           </Link>
         </li>
         <li className='breadcrumb-item'>
-          <Link to={`/decks/${deckId}`}>{studyDeckState?.deck?.name}</Link>
+          <Link to={`/decks/${deckId}`}>{deck.name}</Link>
         </li>
         <li className='breadcrumb-item active' aria-current='page'>
           Study
@@ -80,7 +81,7 @@ function StudyDeck() {
     </nav>
   );
 
-  if (deck?.cards.length <= 2) {
+  if (deck.cards.length <= 2) {
     return (
       <React.Fragment>
         {breadcrumb}
@@ -105,16 +106,16 @@ function StudyDeck() {
     return (
       <React.Fragment>
         {breadcrumb}
-        <h1 className='text-center'>Currently Studying: {deck?.name} </h1>
+        <h1 className='text-center'>Currently Studying: {deck.name} </h1>
         <div className='card'>
           <div className='card-body'>
             <h4 className='card-title'>
-              Card {currentIndex + 1} of {studyDeckState.deck?.cards.length}
+              Card {currentIndex + 1} of {deck.cards.length}
             </h4>
             <h5 className='card-text'>
               {!isCardFlipped
-                ? `Question: ${deck?.cards[currentIndex]?.front}`
-                : `Answer: ${deck?.cards[currentIndex]?.back}`}
+                ? `Question: ${deck.cards[currentIndex].front}`
+                : `Answer: ${deck.cards[currentIndex].back}`}
             </h5>
           </div>
           <button
@@ -127,7 +128,7 @@ function StudyDeck() {
           {isCardFlipped && (
             <button
               className='btn btn-primary py-3'
-              onClick={() => getNextCard()}
+              onClick={getNextCardHandler}
             >
               Next
             </button>

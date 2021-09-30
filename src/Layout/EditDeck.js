@@ -92,7 +92,7 @@ function EditDeck() {
           <button
             type='button'
             className='btn btn-secondary'
-            onClick={() => history.go(-1)}
+            onClick={() => history.goBack()}
           >
             Cancel
           </button>
