@@ -7,11 +7,20 @@ function Home() {
   const history = useHistory();
 
   useEffect(() => {
+    const abortController = new AbortController();
     async function loadDecks() {
-      const decks = await listDecks();
-      setDecks((_) => [...decks]);
+      try {
+        const decks = await listDecks();
+        setDecks((_) => [...decks]);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          throw error;
+        }
+      }
     }
     loadDecks();
+
+    return () => abortController.abort();
   }, []);
 
   const deleteHandler = async (deckId) => {
