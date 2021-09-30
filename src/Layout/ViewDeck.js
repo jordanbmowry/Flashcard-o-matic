@@ -58,7 +58,7 @@ function ViewDeck() {
         </div>
         <div className='card-body'>
           <blockquote className='blockquote mb-0'>
-            <p>{deck?.description}</p>
+            <p>{deck.description}</p>
           </blockquote>
           <div className='d-flex justify-content-around'>
             <Link to={`/decks/${deck.id}/edit`}>
