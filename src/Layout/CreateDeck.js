@@ -21,6 +21,7 @@ function CreateDeck() {
   const submitHandler = async (event) => {
     event.preventDefault();
     const response = await createDeck(formData);
+    setFormData(initialFormState);
     history.push(`/decks/${response.id}`);
   };
 
@@ -38,7 +39,7 @@ function CreateDeck() {
           </li>
         </ol>
       </nav>
-      <form>
+      <form onSubmit={submitHandler}>
         <h1 className='my-4 text-center'>Create Deck</h1>
         <div className='form-group'>
           <label htmlFor='name'>Name</label>
@@ -75,11 +76,7 @@ function CreateDeck() {
             Cancel
           </button>
         </Link>
-        <button
-          type='submit'
-          className='btn btn-primary'
-          onSubmit={submitHandler}
-        >
+        <button type='submit' className='btn btn-primary'>
           Submit
         </button>
       </form>
