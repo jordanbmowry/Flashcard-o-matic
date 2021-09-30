@@ -29,12 +29,12 @@ function ViewDeck() {
   }, [deckId]);
 
   const deleteHandler = async (deckId) => {
-    const response = window.confirm(
+    const confirmation = window.confirm(
       'Delete this deck? You will not be able to recover it.'
     );
-    if (response) {
+    if (confirmation) {
       await deleteDeck(deckId);
-      history.go(0);
+      history.push('/');
     }
   };
 
@@ -90,7 +90,7 @@ function ViewDeck() {
             <button
               type='button'
               className='btn btn-danger'
-              onClick={deleteHandler}
+              onClick={() => deleteHandler(deckId)}
             >
               <i className='fas fa-trash'></i> Delete Deck
             </button>
