@@ -8,6 +8,7 @@ import CreateDeck from './CreateDeck';
 import ViewDeck from './ViewDeck';
 import EditDeck from './EditDeck';
 import AddCard from './AddCard';
+import EditCard from './EditCard';
 
 function Layout() {
   return (
@@ -42,6 +43,10 @@ function Layout() {
 
           <Route exact path='/decks/:deckId/cards/new'>
             <AddCard />
+          </Route>
+
+          <Route exact path='/decks/:deckId/cards/:cardId/edit'>
+            <EditCard />
           </Route>
 
           <Route>
