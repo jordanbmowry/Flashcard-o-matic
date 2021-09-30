@@ -7,13 +7,13 @@ import StudyDeck from './StudyDeck';
 import CreateDeck from './CreateDeck';
 import ViewDeck from './ViewDeck';
 import EditDeck from './EditDeck';
+import AddCard from './AddCard';
 
 function Layout() {
   return (
     <React.Fragment>
       <Header />
       <div className='container'>
-        {/* TODO: Implement the screen starting here */}
         <Switch>
           <Route exact path='/'>
             <Link to='/decks/new'>
@@ -23,18 +23,27 @@ function Layout() {
             </Link>
             <Home />
           </Route>
+
           <Route exact path='/decks/new'>
             <CreateDeck />
           </Route>
+
           <Route exact path='/decks/:deckId/study'>
             <StudyDeck />
           </Route>
+
           <Route exact path='/decks/:deckId/edit'>
             <EditDeck />
           </Route>
+
           <Route exact path='/decks/:deckId'>
             <ViewDeck />
           </Route>
+
+          <Route exact path='/decks/:deckId/cards/new'>
+            <AddCard />
+          </Route>
+
           <Route>
             <NotFound />
           </Route>
