@@ -66,8 +66,6 @@ function EditCard() {
     };
   }, [cardId]);
 
-  console.log(deck);
-
   return (
     <React.Fragment>
       <nav aria-label='breadcrumb'>

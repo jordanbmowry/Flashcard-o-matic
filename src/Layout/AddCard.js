@@ -67,7 +67,9 @@ function AddCard() {
           </li>
         </ol>
       </nav>
-      <h1 className='my-4 text-center'>{deck.name}: Add Card</h1>
+      <h1 className='my-4 text-center'>
+        {deck.name}: <span>Add Card</span>
+      </h1>
       <CardForm
         changeHandler={changeHandler}
         submitHandler={submitHandler}

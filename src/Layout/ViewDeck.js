@@ -15,9 +15,7 @@ function ViewDeck() {
         const response = await readDeck(deckId, abortController.signal);
         setDeck(() => ({ ...response }));
       } catch (error) {
-        if (error.name === 'AbortError') {
-          console.log(error);
-        } else {
+        if (error.name !== 'AbortError') {
           throw error;
         }
       }
