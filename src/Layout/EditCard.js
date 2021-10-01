@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useHistory } from 'react-router-dom';
 import { readDeck, readCard, updateCard } from '../utils/api';
 import CardForm from './CardForm';
 
 function EditCard() {
+  const mountedRef = useRef(false);
   const { deckId, cardId } = useParams();
   const history = useHistory();
 
@@ -15,11 +16,20 @@ function EditCard() {
   const [editCard, setEditCard] = useState(initialCardState);
 
   useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
         const loadedDeck = await readDeck(deckId, abortController.signal);
-        setDeck(() => loadedDeck);
+        if (mountedRef.current) {
+          setDeck(() => loadedDeck);
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
           throw error;
@@ -32,6 +42,26 @@ function EditCard() {
       abortController.abort();
     };
   }, [deckId]);
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    async function loadCard() {
+      try {
+        const loadedCard = await readCard(cardId, abortController.signal);
+        if (mountedRef.current) {
+          setEditCard(() => loadedCard);
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          throw error;
+        }
+      }
+    }
+    loadCard();
+    return () => {
+      abortController.abort();
+    };
+  }, [cardId]);
 
   const changeHandler = ({ target }) => {
     setEditCard((currentState) => ({
@@ -46,25 +76,6 @@ function EditCard() {
     setEditCard(initialCardState);
     history.push(`/decks/${deckId}`);
   };
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    async function loadCard() {
-      try {
-        const loadedCard = await readCard(cardId, abortController.signal);
-        setEditCard(() => loadedCard);
-      } catch (error) {
-        if (error.name !== 'AbortError') {
-          throw error;
-        }
-      }
-    }
-
-    loadCard();
-    return () => {
-      abortController.abort();
-    };
-  }, [cardId]);
 
   return (
     <React.Fragment>

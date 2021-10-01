@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { readDeck } from '../utils/api';
 
 function StudyDeck() {
+  const mountedRef = useRef(false);
   const initialState = {
     deck: { name: 'loading...', cards: [] },
     isCardFlipped: false,
@@ -15,14 +16,23 @@ function StudyDeck() {
   const { deckId } = useParams();
 
   useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
         const loadedDeck = await readDeck(deckId, abortController.signal);
-        setStudyDeckState((currentState) => ({
-          ...currentState,
-          deck: { ...loadedDeck },
-        }));
+        if (mountedRef.current) {
+          setStudyDeckState((currentState) => ({
+            ...currentState,
+            deck: loadedDeck,
+          }));
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
           throw error;

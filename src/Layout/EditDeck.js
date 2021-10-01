@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { readDeck, updateDeck } from '../utils/api';
 
 function EditDeck() {
+  const mountedRef = useRef(false);
   const initialState = { name: '', description: '' };
   const [editDeckFormData, setEditDeckFormData] = useState(initialState);
 
@@ -10,11 +11,20 @@ function EditDeck() {
   const history = useHistory();
 
   useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
         const loadedDeck = await readDeck(deckId, abortController.signal);
-        setEditDeckFormData(() => loadedDeck);
+        if (mountedRef.current) {
+          setEditDeckFormData(() => loadedDeck);
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
           throw error;
@@ -92,7 +102,7 @@ function EditDeck() {
           <button
             type='button'
             className='btn btn-secondary'
-            onClick={() => history.goBack()}
+            onClick={() => history.push(`/decks/${deckId}`)}
           >
             Cancel
           </button>

@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams, useHistory, Route } from 'react-router-dom';
 import { deleteDeck, readDeck } from '../utils/api';
 import ViewCards from './ViewCards';
 
 function ViewDeck() {
+  const mountedRef = useRef(false);
   const { deckId } = useParams();
   const history = useHistory();
   const [deck, setDeck] = useState({ name: 'loading...', cards: [] });
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
         const response = await readDeck(deckId, abortController.signal);
-        setDeck(() => ({ ...response }));
+        if (mountedRef.current) {
+          setDeck(() => ({ ...response }));
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
           throw error;

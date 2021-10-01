@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import { readDeck, createCard } from '../utils/api';
 import CardForm from './CardForm';
 
 function AddCard() {
+  const mountedRef = useRef(false);
   const initialFormState = {
     id: '',
     front: '',
@@ -18,13 +19,22 @@ function AddCard() {
   const [newCardData, setNewCardData] = useState(initialFormState);
   const history = useHistory();
   const { deckId } = useParams();
+  // effect just for tracking mounted state
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const abortController = new AbortController();
     async function loadDeck() {
       try {
         const loadedDeck = await readDeck(deckId, abortController.signal);
-        setDeck(() => loadedDeck);
+        if (mountedRef.current) {
+          setDeck(() => loadedDeck);
+        }
       } catch (error) {
         if (error.name !== 'AbortError') {
           throw error;
