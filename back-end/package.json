@@ -1,0 +1,21 @@
+{
+  "name": "project-flashcards-backend",
+  "version": "1.0.0",
+  "description": "project flashcards backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start:dev": "nodemon src/server.js"
+  },
+  "author": "Jordan Mowry",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^12.0.3",
+    "express": "^4.17.2",
+    "knex": "^1.0.1",
+    "pg": "^8.7.1"
+  }
+}
