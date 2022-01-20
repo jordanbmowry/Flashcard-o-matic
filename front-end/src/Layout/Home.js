@@ -18,7 +18,7 @@ function Home() {
     const abortController = new AbortController();
     async function loadDecks() {
       try {
-        const decks = await listDecks();
+        const decks = await listDecks(abortController.signal);
         if (mountedRef.current) {
           setDecks((_) => [...decks]);
         }
