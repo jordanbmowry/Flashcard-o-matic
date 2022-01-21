@@ -34,12 +34,19 @@ function Home() {
   }, []);
 
   const deleteHandler = async (deckId) => {
-    const confirmation = window.confirm(
-      'Delete this deck? You will not be able to recover it.'
-    );
-    if (confirmation) {
-      await deleteDeck(deckId);
-      history.go(0);
+    const controller = new AbortController();
+    try {
+      const confirmation = window.confirm(
+        'Delete this deck? You will not be able to recover it.'
+      );
+      if (confirmation) {
+        await deleteDeck(deckId, controller.signal);
+        history.go(0);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      return controller.abort();
     }
   };
 
